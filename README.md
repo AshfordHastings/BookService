@@ -1,18 +1,23 @@
-Outstanding Tasks
-    Modularize Routes
-
-Architecture
-
-ORM / Repository
-    Currently, I map tables imperatively, without assigning specific routing rules. I map imperatively, because in doing this, I can easily map a book_table SQLAlchemy Table and its respective columns to a class that I have created, a class without reference to the tables and rows to be persisted in the database. The mapping of my class to DB table is isolated from the domain objects themselves. Using imperative mapping seems more intuitive than declaritive, because in imperative, the columns are explicitly mapped to the rows. If I use declarative, I will have objects for both the DBModel and the Model itself, which is unintuitive. 
-
-    Why have a start mappers function?
-    Bidirectionality in Domain Objects
-
-
-
-Plan to Go Forward
-    Finalize basic book api, with just authors and users.
-    Determine domain requirements for expanded bookstore - implement and test the domain models.
-        Study design patterns with OOP first? 
-    Go further with the event driven architecture.  
+Book Rental Service
+Basic Requirements:
+User Requirements
+    A user can sign into the service and check out books.
+    A user can download the book in any format.
+    The user can receive a preview of the book on the website.
+    The user can browse the selection of books and authors.
+User Permissions
+    A free user can only download 5 books per month.
+    A free user can subscribe to premium and get unlimited access to books per month.
+Billing
+    A user subscribing to premium must enter the account information to subscribe to premium
+    A user will be charged for the corresponding amount. 
+Book Downlaoding
+    A book is posted in a certain format.
+    The user must download that book as that format.
+    Premium users are able to convert the book to another format. 
+Adding Books
+    A certain role is able to upload books to the website.
+    Books must be added with their corresponding metadata, including premium, free, format, etc.
+    Admin Users can delete books, update book metadata
+Recommendations
+    Book Downloads for both a user and all users are tracked and used to generate recommendations on new books to read. 

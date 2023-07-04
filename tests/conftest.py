@@ -2,7 +2,6 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, clear_mappers
 from sqlalchemy.exc import OperationalError
-import requests
 from pathlib import Path
 import time
 from entrypoints.flask_app import create_app
