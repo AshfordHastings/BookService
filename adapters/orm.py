@@ -1,44 +1,29 @@
 from sqlalchemy import Integer, String, ForeignKey, Table, Column
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, registry, relationship
-
+from sqlalchemy import Uuid
+from typing import List
 from domain.model import Book, Author
 
-mapper_registry = registry()
+# ID = UUID(as_uuid=True)
 
-book_table = Table(
-    "book",
-    mapper_registry.metadata,
-    Column("id", Integer, primary_key=True, autoincrement=True),
-    Column("title", String),
-    Column("year", Integer),
-    Column("author_id", Integer, ForeignKey("author.id"), default=None )
-)
+class Base(DeclarativeBase):
+    pass
 
-author_table = Table(
-    "author",
-    mapper_registry.metadata,
-    Column("id", Integer, primary_key=True, autoincrement=True),
-    Column("first_name", String),
-    Column("last_name", String),
-)
-def start_mappers():
-    mapper_registry.map_imperatively(
-        Book,
-        book_table,
-        properties={
-            "_author": relationship(
-                Author
-            )
-        }
-    )
+class AuthorModel(Base):
+    __tablename__ = "author"
+    id: Mapped[Uuid(as_uuid=True)] = mapped_column(primary_key=True)
+    first_name: Mapped[str]
+    last_name: Mapped[str]
 
-    mapper_registry.map_imperatively(
-        Author,
-        author_table,
-        properties={
-            "_books": relationship(
-                Book, 
-                collection_class=set,),
-        },
-        
-    )
+    books: Mapped[List['BookModel']] = relationship(back_populates='author')
+
+class BookModel(Base):
+    __tablename__ = "book"
+
+    id: Mapped[Uuid(as_uuid=True)] = mapped_column(primary_key=True)
+    title: Mapped[str]
+    year: Mapped[int]
+    file_extension: Mapped[str]
+    author_id: Mapped[int] = mapped_column(ForeignKey("author.id"))
+
+    author: Mapped['AuthorModel'] =  relationship(back_populates='books')

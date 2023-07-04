@@ -2,11 +2,16 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Dict, List, Tuple
 from pathlib import Path
+from uuid import UUID, uuid4
+
+AuthorID = UUID
+BookID = UUID
 
 @dataclass
 class Author:
     first_name: str
     last_name: str
+    id: AuthorID = uuid4()
 @dataclass 
 class BookMetadata:
     file_extension: str
@@ -17,8 +22,8 @@ class BookInfo:
     author: Author
 
 class Book:
-    def __init__(self, info:BookInfo, metadata: BookMetadata):
-        self.id = id(self)
+    def __init__(self, info:BookInfo, metadata: BookMetadata, id:BookID=uuid4()):
+        self.id = id
         self.info = info
         self.book = metadata
 
@@ -35,7 +40,6 @@ class Shelf:
     def store_book_and_content(self, book:Book, content:bytes) -> None:
         self.host.store_book_content(book, content)
         self._books.update({book.id: book})
-
 
 class Host(ABC):
     @abstractmethod
