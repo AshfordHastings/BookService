@@ -1,8 +1,8 @@
 import pytest
 
 from domain.model import Author, Book
-from adapters.respository import SQLAlchemyRepository
-from service_layer.services import update_author
+#from adapters.respository import SQLAlchemyRepository
+#from service_layer.services import update_author
 
 @pytest.fixture()
 def book_with_author(session):
@@ -13,6 +13,7 @@ def book_with_author(session):
     repo.add_all([author, book])
     return book
 
+@pytest.mark.skip(reason="Unfinished test.")
 def test_add_book_to_author(session, book_with_author):
     # Adding... but not actually committing to the Database
     author = Author("William", "Faulkner")

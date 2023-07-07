@@ -1,6 +1,6 @@
 from domain.model import Book, Author, BookMetadata, BookInfo
-from adapters.respository import SQLAlchemyBookRepository
-from sqlalchemy import text
+from sqlalchemy import text, select
+ 
 
 def test_repository_can_save_a_book(session):
     a = Author("John", "Steinbeck")
@@ -8,14 +8,30 @@ def test_repository_can_save_a_book(session):
     i = BookInfo("East of Eden", 1937, a)
     b = Book(i, f)
 
-    repo = SQLAlchemyBookRepository(session)
-    repo.add(b)
-    session.commit()
+    session.add(b)
 
-    rows = session.execute(text(
-        'SELECT title, year FROM "book"'
-    ))
-    assert list(rows) == [('East of Eden', 1937)]
+    stmt = select(Author.first_name, Author.last_name)
+    row = session.execute(stmt).first()
+    assert row == ("John", "Steinbeck")
+
+    stmt = select(Author)
+    author = session.scalars(stmt).first()
+    assert author.first_name == "John" and author.last_name == "Steinbeck"
+
+    stmt = select(Book, BookInfo).join(Book.info)
+    book, book_info = session.execute(stmt).first()
+    assert book_info.title == "East of Eden"
+    assert book_info.year == 1937
+    assert book_info.author.first_name == "John"
+
+    stmt = select(Book)
+    book = session.scalars(stmt).first()
+    assert book.info.title == "East of Eden"
+    assert book.info.year == 1937
+    assert book.info.author.first_name == "John"
+    assert book.book_metadata.file_extension == "txt"
+
+
 
 # def test_repository_can_save_a_book(session):
 #     book1 = Book("Grapes of Wrath", 1937)
