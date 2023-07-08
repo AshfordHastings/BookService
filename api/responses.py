@@ -8,6 +8,12 @@ SUCCESS_200 = {
 def response_with(response, value=None, message=None, error=None, headers={}, pagination=None):
     result = {}
     if value is not None:
+        if type(value) is dict:
+            value = {key:val.__json__() for (key,val) in value.items() if callable(val.__tojson__)}
+        elif type(value) is list:
+            value = [val.__json__() for val in value if callable(val.__json__) ]
+        elif callable(value.__json__):
+            value = value.__json__()
         result.update({"value": value})
 
     if response.get('message', None) is not None:
@@ -24,4 +30,4 @@ def response_with(response, value=None, message=None, error=None, headers={}, pa
     headers.update({'Access-Control-Allow-Origin': '*'})
     headers.update({'server': 'Flask REST API'})
 
-    return make_response(jsonify(value.__json__()), response['http_code'], headers)
+    return make_response(jsonify(value), response['http_code'], headers)
