@@ -1,0 +1,45 @@
+openapi: '3.0.3'
+info:
+  title: Flask Tutorial API
+  version: '1.0'
+servers:
+  - url: https://api.server.test/v1
+
+paths:
+  /books:
+    post:
+      description: 'Create a new book.'
+      requestBody:
+
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        year:
+          type: integer
+    Error:
+      type: object
+      properties:
+        http_code:
+          type: integer
+        code: 
+          type: string 
+        message:
+          type: string 
+      required:
+      - http_code 
+      - code 
+      - message 
+  requestBodies:
+    BookRequest:
+      description: A JSON object container Book information
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Book'
+          
