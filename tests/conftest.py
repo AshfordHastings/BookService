@@ -6,7 +6,7 @@ from sqlalchemy.exc import OperationalError
 
 
 from domain.model import Base as SQLAlchemyBase
-from entrypoints.flask_app import create_app
+from api.entrypoints.flask_app import create_app
 import config
 
 
