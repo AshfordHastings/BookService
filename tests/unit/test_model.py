@@ -1,4 +1,4 @@
-from domain.model import Book, Author, BookInfo, BookMetadata, Shelf, DirHost, TempHost
+from domain.model import BookObject, Book, Author, MData, Shelf, DirHost, TempHost
 
 # def test_add_book_to_author():
 #     author1 = Author("John", "Steinbeck")
@@ -16,9 +16,9 @@ from domain.model import Book, Author, BookInfo, BookMetadata, Shelf, DirHost, T
 
 def test_can_store_and_retrieve_book_from_dir(tmp_path):
     a = Author("John", "Steinbeck")
-    f = BookMetadata("txt")
-    i = BookInfo("East of Eden", 1937, a)
-    b = Book(i, f)
+    f = MData("txt")
+    i = Book("East of Eden", 1937, a)
+    b = BookObject(i, f)
     s = Shelf(DirHost(tmp_path))
     s.store_book_and_content(b, b'Hello World!')
     (get_book, get_content) = s.get_book_and_content(b.id)
@@ -27,9 +27,9 @@ def test_can_store_and_retrieve_book_from_dir(tmp_path):
 
 def test_can_store_and_retrieve_book_from_dir():
     a = Author("John", "Steinbeck")
-    f = BookMetadata("txt")
-    i = BookInfo("East of Eden", 1937, a)
-    b = Book(i, f)
+    f = MData("txt")
+    i = Book("East of Eden", 1937, a)
+    b = BookObject(i, f)
     s = Shelf(TempHost())
     s.store_book_and_content(b, b'Hello World!')
     (get_book, get_content) = s.get_book_and_content(b.id)

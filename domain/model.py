@@ -9,17 +9,17 @@ class Base(DeclarativeBase):
     pass
 
 
-class BookMetadata(Base):
-    __tablename__ = "metadata"
-    id: Mapped[str] = mapped_column(primary_key=True)
-    file_extension: Mapped[str]
+class MData(Base):
+    __tablename__ = "m_data"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    ext: Mapped[str]
 
-    def __init__(self, file_extension):
-        self.file_extension = file_extension
+    def __init__(self, ext):
+        self.ext = ext
 
 class Author(Base):
     __tablename__ = "author"
-    id: Mapped[str] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     first_name: Mapped[str] = mapped_column(nullable=False)
     last_name: Mapped[str]
 
@@ -27,9 +27,9 @@ class Author(Base):
         self.first_name = first_name
         self.last_name = last_name
 
-class BookInfo(Base):
-    __tablename__ = "info"
-    id: Mapped[str] = mapped_column(primary_key=True)
+class Book(Base):
+    __tablename__ = "book"
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     title: Mapped[str]
     year: Mapped[int]
     author_id: Mapped[int] = mapped_column(ForeignKey("author.id"))
@@ -41,18 +41,23 @@ class BookInfo(Base):
         self.year = year
         self.author = author
 
-class Book(Base):
-    __tablename__ = "book"
-    id: Mapped[str] = mapped_column(primary_key=True)
-    info_id: Mapped[int] = mapped_column(ForeignKey("info.id"))
-    metadata_id: Mapped[int] = mapped_column(ForeignKey("metadata.id"))
+class BookObject(Base):
+    __tablename__ = "book_object"
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    book_id: Mapped[int] = mapped_column(ForeignKey("book.id"))
+    m_data_id: Mapped[int] = mapped_column(ForeignKey("m_data.id"))
 
-    book_metadata: Mapped['BookMetadata'] = relationship()
-    info: Mapped['BookInfo'] = relationship()
+    m_data: Mapped['MData'] = relationship()
+    book: Mapped['Book'] = relationship()
 
-    def __init__(self, info, book_metadata):
-        self.info = info
-        self.book_metadata = book_metadata
+    # __mapper_args__ = {
+    #     "polymorphic_on": "type",
+    #     "polymorphic_identity": "book"
+    # }
+
+    def __init__(self, book, m_data):
+        self.book = book
+        self.m_data = m_data
 
 
 
@@ -80,7 +85,7 @@ class Book(Base):
 #         self.book = metadata
 
 class Shelf:
-    def __init__(self, host:'Host', books:Dict[str, Book]={}):
+    def __init__(self, host:'Host', books:Dict[str, BookObject]={}):
         self.host = host
         self._books= books
 
@@ -98,15 +103,15 @@ class Host(ABC):
     def get_book_content():
         pass
     @abstractmethod
-    def store_book_content(self, book:Book, content:bytes):
+    def store_book_content(self, book:BookObject, content:bytes):
         pass
 class DirHost(Host):
     def __init__(self, base_dir):
         self.base_dir = base_dir
-    def get_book_content(self, book:Book) -> bytes:
+    def get_book_content(self, book:BookObject) -> bytes:
         loc = self.base_dir / format_book_filename(book)
         return loc.read_bytes()
-    def store_book_content(self, book:Book, content:bytes) -> None:
+    def store_book_content(self, book:BookObject, content:bytes) -> None:
         loc = self.base_dir / format_book_filename(book)
         loc.parents[0].mkdir(parents=True, exist_ok=True)
         loc.write_bytes(content)
@@ -114,9 +119,9 @@ class DirHost(Host):
 class TempHost(Host):
     def __init__(self, in_mem_content={}):
         self.in_mem_content = in_mem_content
-    def get_book_content(self, book:Book) -> bytes:
+    def get_book_content(self, book:BookObject) -> bytes:
         return self.in_mem_content.get(book.id)
-    def store_book_content(self, book:Book, content:bytes) -> None:
+    def store_book_content(self, book:BookObject, content:bytes) -> None:
         self.in_mem_content.update({ book.id: content })
 
 def format_book_filename(book:Book) -> Path:
