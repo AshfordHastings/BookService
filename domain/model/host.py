@@ -38,6 +38,10 @@ class Host(Base):
 class AzureBlobStorageHost(Host):
     url: Mapped[str] = mapped_column(nullable=True)
     container: Mapped[str] = mapped_column(nullable=True)
+    
+    __mapper_args__ = {
+        "polymorphic_identity": "azure_blob_container"
+    }
 
 class DirHost(Host):
     base_dir: Mapped[str] = mapped_column(nullable=True)
