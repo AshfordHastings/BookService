@@ -6,6 +6,14 @@ from api.responses import response_with, SUCCESS_200
 book_bp = Blueprint('book', __name__)
 
 
+@book_bp.route("/books", methods=["GET"])
+def get_books():
+    session = g.db_session
+
+    stmt = select(Book).order_by(Book.id)
+    books = session.scalars(stmt).all()
+    return response_with(SUCCESS_200, value=books)
+
 @book_bp.route("/books/<int:book_id>", methods=["GET"])
 def get_book(book_id):
     session = g.db_session
@@ -15,7 +23,6 @@ def get_book(book_id):
 
     if book == None: return make_response({}, 404)
     return response_with(SUCCESS_200, value=book)
-    return make_response({book}, 201) 
 
 
 @book_bp.route("/books", methods=["POST"])
