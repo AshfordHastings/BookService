@@ -30,4 +30,4 @@ def response_with(response, value=None, message=None, error=None, headers={}, pa
     headers.update({'Access-Control-Allow-Origin': '*'})
     headers.update({'server': 'Flask REST API'})
 
-    return make_response(jsonify(value), response['http_code'], headers)
+    return make_response(jsonify(result), response['http_code'], headers)
