@@ -1,4 +1,4 @@
-from domain.model import BookObject, Author, MData, Book
+from domain.model.book import BookObject, Author, MData, Book
 from sqlalchemy import text, select
  
 

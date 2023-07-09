@@ -1,6 +1,6 @@
 import pytest
 
-from domain.model import Author, Book
+from domain.model.book import Author, Book
 #from adapters.respository import SQLAlchemyRepository
 #from service_layer.services import update_author
 

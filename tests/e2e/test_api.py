@@ -1,6 +1,6 @@
 import pytest, requests, json
 
-from domain.model import Book, Author
+from domain.model.book import Book, Author
 from api.schemas.book import BookSchema
 import config
 

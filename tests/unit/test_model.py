@@ -1,4 +1,5 @@
-from domain.model import BookObject, Book, Author, MData, Shelf, DirHost, TempHost
+from domain.model.book import BookObject, Book, Author, MData
+from domain.model.host import Shelf, DirHost, TempHost
 
 # def test_add_book_to_author():
 #     author1 = Author("John", "Steinbeck")

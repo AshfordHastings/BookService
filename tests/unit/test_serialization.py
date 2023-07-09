@@ -1,5 +1,5 @@
 import json
-from domain.model import Book, Author
+from domain.model.book import Book, Author
 
 def test_book_can_serialize():
     author = Author(
