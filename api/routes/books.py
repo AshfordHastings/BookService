@@ -1,5 +1,5 @@
 from flask import Blueprint, request, g, make_response
-from domain.model import BookObject, Book, MData, Author
+from domain.model.book import BookObject, Book, MData, Author
 from sqlalchemy import select 
 from api.responses import response_with, SUCCESS_200
 
