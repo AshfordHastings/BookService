@@ -42,43 +42,6 @@ def add_book():
     messagebus.handle(command, session)
     return make_response({}, 201)
 
-
-
-    a = session.scalars(select(Author).where(
-        Author.first_name==request.json["first_name"] and
-        Author.last_name==request.json["last_name"]
-    )).first()
-    if a is None:
-        a = Author(
-            request.json["first_name"],
-            request.json["last_name"]
-        )
-
-    book = BookObject(
-        Book(
-            request.json["title"],
-            request.json["year"],
-            a
-        ),
-        MData(
-            request.json["extension"]
-        )
-    )
-    
-    session.add(book)
-    session.commit()
-
-    return make_response({}, 201)
-
-
-
-# @book_bp.route("/books", methods=["GET"])
-# def get_books():
-#     # session = get_session()
-
-#     SQLAlchemyRepository(session).lis
-#     return make_response({}, 201)
-
 # @book_bp.route("/books/<int:book_id>/update-author", methods=["POST"])
 # def update_author_endpoint(book_id):
 #     book = SQLAlchemyRepository(session).get(Book, book_id)
