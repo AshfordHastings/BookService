@@ -44,7 +44,6 @@ def test_post_book_returns_2011(client):
     resp = client.post(f"{url}/books", json=data)
     assert resp.status_code == 201
 
-@pytest.mark.skip(reason="Unfinished test.")
 def test_get_book_returns_book_and_200(client, persisted_book):
     book_id = persisted_book.id
     url = config.get_api_url()
@@ -55,15 +54,17 @@ def test_get_book_returns_book_and_200(client, persisted_book):
     assert val['title'] == persisted_book.title
     assert val['author']['first_name'] == persisted_book.author.first_name
 
-@pytest.mark.skip(reason="Unfinished test.")
+
 def test_get_book_list(client, persisted_book_list):
+    # TODO: Validate json output for its values  
     url = config.get_api_url()
     resp = client.get(f"{url}/books")
     assert resp.status_code == 200
-    book_schema = BookSchema(many=True)
-    #assert resp.json["value"] == book_schema.dump(persisted_book_list)
-    print(resp.json)
+    assert len(resp.json['value']) == 3
+    
     # assert resp.json.get("value")
+    #book_schema = BookSchema(many=True)
+    #assert resp.json["value"] == book_schema.dump(persisted_book_list)
     # assert len(resp.json.get("value")) == 3
 
 
