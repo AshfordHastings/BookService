@@ -3,6 +3,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship, composite
 from dataclasses import dataclass
 
 from . import Base
+from host import Host
 
 # class MData(Base):
 #     __tablename__ = "m_data"
@@ -74,10 +75,15 @@ class BookObject(Base):
     __tablename__ = "book_object"
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     book_id: Mapped[int] = mapped_column(ForeignKey("book.id"))
+    host_id: Mapped[Host] = mapped_column(ForeignKey("host.id"))
 
     m_data: Mapped['MData'] = composite(mapped_column("ext"))
     book: Mapped['Book'] = relationship()
+    host: Mapped['Host'] = relationship(back_populates='Host')
 
     def __init__(self, book, m_data):
         self.book = book
         self.m_data = m_data
+
+    def get_book_content(self):
+        return self.host(self)
