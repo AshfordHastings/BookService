@@ -2,8 +2,9 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship, composite
 from dataclasses import dataclass
 
+from domain.model.host import Host
+
 from . import Base
-from host import Host
 
 # class MData(Base):
 #     __tablename__ = "m_data"
@@ -77,9 +78,10 @@ class BookObject(Base):
     book_id: Mapped[int] = mapped_column(ForeignKey("book.id"))
     host_id: Mapped[Host] = mapped_column(ForeignKey("host.id"))
 
-    m_data: Mapped['MData'] = composite(mapped_column("ext"))
-    book: Mapped['Book'] = relationship()
-    host: Mapped['Host'] = relationship(back_populates='Host')
+    m_data: Mapped[MData] = composite(mapped_column("ext"))
+    book: Mapped[Book] = relationship()
+    #host: Mapped[Host] = relationship(back_populates='Host')
+    host: Mapped[Host] = relationship()
 
     def __init__(self, book, m_data):
         self.book = book

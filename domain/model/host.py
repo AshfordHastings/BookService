@@ -4,7 +4,9 @@ from pathlib import Path
 from sqlalchemy.orm import Mapped, mapped_column
 
 from . import Base
-from .book import BookObject, Book
+#from domain.model.book import BookObject, Book
+#import domain.model.book as book
+#from . import book
 
 # class Shelf:
 #     def __init__(self, host:'Host', books:Dict[str, BookObject]={}):
@@ -32,7 +34,7 @@ class Host(Base):
 
     def get_book_content():
         pass
-    def store_book_content(self, book:BookObject, content:bytes):
+    def store_book_content(self, book:'BookObject', content:bytes):
         pass
 
 class AzureBlobStorageHost(Host):
@@ -52,10 +54,10 @@ class DirHost(Host):
 
     def __init__(self, base_dir):
         self.base_dir = base_dir
-    def get_book_content(self, book:BookObject) -> bytes:
+    def get_book_content(self, book:'BookObject') -> bytes:
         loc = self.base_dir / format_book_filename(book)
         return loc.read_bytes()
-    def store_book_content(self, book:BookObject, content:bytes) -> None:
+    def store_book_content(self, book:'BookObject', content:bytes) -> None:
         loc = self.base_dir / format_book_filename(book)
         loc.parents[0].mkdir(parents=True, exist_ok=True)
         loc.write_bytes(content)
@@ -67,12 +69,12 @@ class TempHost(Host):
 
     def __init__(self, in_mem_content={}):
         self.in_mem_content = in_mem_content
-    def get_book_content(self, book:BookObject) -> bytes:
+    def get_book_content(self, book:'BookObject') -> bytes:
         return self.in_mem_content.get(book.id)
-    def store_book_content(self, book:BookObject, content:bytes) -> None:
+    def store_book_content(self, book:'BookObject', content:bytes) -> None:
         self.in_mem_content.update({ book.id: content })
 
-def format_book_filename(book:Book) -> Path:
+def format_book_filename(book:'Book') -> Path:
     p =  Path() \
         / f"{book.book_info.author.last_name}_{book.book_info.author.first_name}" \
         / f"{book.book_info.title.replace(' ' , '_')}" \
