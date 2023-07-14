@@ -20,4 +20,3 @@ def create_book(command: commands.CreateBook, session:Session):
         a
     )
     session.add(book)
-    print("Book has been created!")
