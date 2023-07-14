@@ -21,3 +21,6 @@ Adding Books
     Admin Users can delete books, update book metadata
 Recommendations
     Book Downloads for both a user and all users are tracked and used to generate recommendations on new books to read. 
+
+Events:
+    Poll the remote location to see if there are any new items to grab
