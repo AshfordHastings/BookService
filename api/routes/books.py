@@ -2,6 +2,8 @@ from flask import Blueprint, request, g, make_response
 from domain.model.book import BookObject, Book, MData, Author
 from sqlalchemy import select 
 from api.responses import response_with, SUCCESS_200
+from domain import commands, events
+from service_layer import messagebus
 
 book_bp = Blueprint('book', __name__)
 
@@ -29,6 +31,18 @@ def get_book(book_id):
 def add_book():
     session = g.db_session
     # Maybe implement custom create or get method util?
+    command = commands.CreateBook(
+        request.json["title"], 
+        request.json["year"], 
+        Author(
+            request.json["first_name"],
+            request.json["last_name"]
+        )
+    )
+    messagebus.handle(command, session)
+    return make_response({}, 201)
+
+
 
     a = session.scalars(select(Author).where(
         Author.first_name==request.json["first_name"] and
