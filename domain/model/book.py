@@ -69,7 +69,7 @@ class Book(Base):
             'id': self.id,
             'title': self.title,
             'year': self.year,
-            'author': self.author.__json__()
+            'author_id': self.author_id
         }
 
 
