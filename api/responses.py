@@ -1,12 +1,26 @@
 from flask import make_response, jsonify
 
+#TODO: Understand and create error codes - assign to endpoints 
 SUCCESS_200 = {
     'http_code': 200,
     'code': 'success'
 }
 
+SUCCESS_201 = {
+    'http_code': 201,
+    'code': 'success'
+}
+
+ERROR_400 = {
+    'http_code': 400,
+    'code': 'error'
+}
+
+
+
 def response_with(response, value=None, message=None, error=None, headers={}, pagination=None):
     result = {}
+    #TODO: Externalize into JSON serializer
     if value is not None:
         if type(value) is dict:
             value = {key:val.__json__() for (key,val) in value.items() if callable(val.__tojson__)}

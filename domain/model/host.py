@@ -32,7 +32,7 @@ class Host(Base):
         "polymorphic_abstract": True
     }
 
-    def get_book_content():
+    def get_book_content() -> bytes:
         pass
     def store_book_content(self, book:'BookObject', content:bytes):
         pass

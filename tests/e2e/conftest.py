@@ -3,6 +3,8 @@ import pytest, requests, json
 from domain.model.book import Book, Author
 from api.schemas.book import BookSchema
 
+import config
+
 def create_persisted_author(session, first_name, last_name):
     author = Author(
         first_name=first_name,
@@ -16,12 +18,13 @@ def create_persisted_book(session, title, year, persisted_author):
     book = Book(
         title,
         year,
-        author=persisted_author
+        author_id=persisted_author.id
     )
     session.add(book)
     session.commit()
     return book
 
+#TODO: Update this unit test for new author class
 @pytest.fixture()
 def persisted_book_list(session):
     b_list = [('Of Mice and Men', 1937), ('Grapes of Wrath', 1945), ('The Pearl', 1951)]

@@ -1,6 +1,6 @@
 from flask import Flask, g
 
-from api.routes import book_bp
+from api.routes import book_bp, author_bp
 
 def create_app(session):
     app = Flask(__name__)
@@ -17,5 +17,6 @@ def create_app(session):
         return response
 
     app.register_blueprint(book_bp)
+    app.register_blueprint(author_bp)
     
     return app

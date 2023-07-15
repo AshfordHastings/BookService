@@ -1,3 +1,13 @@
+ToDo:
+    JSON Serializaton of inputs
+    Update API resource modeling 
+    Clean up __init__ files etc
+    Error handling for event bus
+
+
+
+
+
 Book Rental Service
 Basic Requirements:
 User Requirements

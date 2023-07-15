@@ -41,8 +41,8 @@ class User {
     +display_name: str 
 }
 
-Host }o--|| BookObject  
-' Host *-- BookObject
+
+Host *-- BookObject
 Host <|- AzureBlobStorageHost
 Host <|- DirHost
 Host <|- TempHost
@@ -51,7 +51,7 @@ BookObject *-- Book
 BookObject *-- MData
 User *-* Book
 
-' Host }-- BookObject / Many to one
+' Host }--|| BookObject / Many to one
 
 @enduml
 

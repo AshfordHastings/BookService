@@ -6,27 +6,28 @@ from . import event_handlers
 from . import command_handlers
 
 Message = Union[commands.Command, events.Event]
-
+#TODO: Update Error handling here!!
 def handle(message: Message, session:Session):
     if isinstance(message, commands.Command):
-        handle_command(message, session)
+        return handle_command(message, session)
     elif isinstance(message, events.Event):
         handle_event(message, session)
-    # for handler in HANDLERS[type(event)]:
-    #     handle(event)
 
 def handle_command(command: commands.Command, session:Session):
     handlers = COMMAND_HANDLERS[type(command)]
+    results = []
     for handler in handlers:
-        handler(command, session)
+        results.append(handler(command, session))
     session.commit()
+    return results[0]
     
 def handle_event(event: events.Event):
     pass
 
 
 COMMAND_HANDLERS = {
-    commands.CreateBook: [command_handlers.create_book]
+    commands.CreateBook: [command_handlers.create_book],
+    commands.CreateAuthor: [command_handlers.create_author]
 }
 
 HANDLERS = {

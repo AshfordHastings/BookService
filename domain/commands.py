@@ -9,4 +9,9 @@ class Command:
 class CreateBook(Command):
     title: str
     year: int
-    author: Author
+    author_id: int
+
+@dataclass
+class CreateAuthor(Command):
+    first_name: str
+    last_name: str
