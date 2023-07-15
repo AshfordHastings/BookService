@@ -24,24 +24,26 @@ from sqlalchemy.orm import Session
 
 #TODO: Update to allow Authors and Books to be passed in as object maybe? 
 def create_author(session:Session, first_name, last_name):
-    author = messagebus.handle(
+    results = messagebus.handle(
         commands.CreateAuthor(
             first_name,
             last_name
         ),
         session
     )
+    author = results.pop()
     return author
 
 def create_book_with_author_id(session:Session, title, year, author_id):
-    book = messagebus.handle(
+    results = messagebus.handle(
         commands.CreateBook(
             title,
             year,
             author_id
         ),
         session
-    )    
+    )
+    book = results.pop()
     return book
 
 def create_book_and_author(session:Session, title, year, first_name, last_name):
