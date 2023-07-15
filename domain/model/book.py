@@ -51,12 +51,12 @@ class Book(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     title: Mapped[str]
     year: Mapped[int]
-    author_id: Mapped[int] = mapped_column(ForeignKey("author.id"))
+    author_id: Mapped[int] = mapped_column(ForeignKey("author.id"), nullable=True)
 
     author: Mapped['Author'] =  relationship()
 
     #TODO: Check if there is a way around this... 
-    def __init__(self, title, year, author_id):
+    def __init__(self, title, year, author_id=None):
         self.title = title
         self.year = year
         self.author_id = author_id
