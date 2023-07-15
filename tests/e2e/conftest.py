@@ -1,7 +1,7 @@
 import pytest, requests, json
 
 from domain.model.book import Book, Author
-from api.schemas.book import BookSchema
+from domain.schemas import BookSchema
 
 import config
 

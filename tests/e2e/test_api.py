@@ -1,7 +1,7 @@
 import pytest
 import config
 
-@pytest.mark.skip()
+
 def test_get_book_returns_book_and_200(client, persisted_book):
     book_id = persisted_book.id
     url = config.get_api_url()
@@ -10,9 +10,8 @@ def test_get_book_returns_book_and_200(client, persisted_book):
     val = resp.json.get('value')
     assert val['id'] == persisted_book.id
     assert val['title'] == persisted_book.title
-    assert val['author']['first_name'] == persisted_book.author.first_name
+    assert val['author_id'] == persisted_book.author_id
 
-@pytest.mark.skip()
 @pytest.mark.usefixtures('persisted_book_list')
 def test_get_book_list(client):
     # TODO: Validate json output for its values  
@@ -20,11 +19,6 @@ def test_get_book_list(client):
     resp = client.get(f"{url}/books")
     assert resp.status_code == 200
     assert len(resp.json['value']) == 3
-    
-    # assert resp.json.get("value")
-    #book_schema = BookSchema(many=True)
-    #assert resp.json["value"] == book_schema.dump(persisted_book_list)
-    # assert len(resp.json.get("value")) == 3
 
 
 def test_create_book_returns_201(client):
@@ -70,7 +64,6 @@ def test_create_book_with_author_id_returns_201(client, persisted_author):
     assert resp.json["value"]
     print("Hello")
     print(resp.json["value"])
-
 def test_create_author(client):
     data = {
         "first_name": "John",

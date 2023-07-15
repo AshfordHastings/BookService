@@ -73,7 +73,7 @@ class Book(Base):
         }
 
 
-class BookObject(Base):
+class BookObject():
     __tablename__ = "book_object"
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     book_id: Mapped[int] = mapped_column(ForeignKey("book.id"))

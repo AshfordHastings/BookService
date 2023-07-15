@@ -12,22 +12,31 @@ class AuthorSchema(Schema):
         return Author(**data)
 
 class BookSchema(Schema):
+    #author = fields.Str()
     id = fields.Int()
     title = fields.Str(required=True)
     year = fields.Int()
 
     #TODO: Determine if I can allow author_id to share the id field of AuthorSchema.
-    #TODO: Determine if this is too much 'business logic' in my schema
+    
     author_id = fields.Int(required=False)
-    author = fields.Nested(AuthorSchema, required=False, load_only=True)
+    #author = fields.Nested(AuthorSchema, required=False)
+    #author = fields.Str()
 
-    @validates_schema
-    def validate_author_fields(self, data, **kwargs):
-        if not data.get("author_id") and not data.get("author"):
-            raise ValidationError("Either 'author_id' or 'author' is required.")
-        if data.get("author_id") and data.get("author"):
-            raise ValidationError("Only one of 'author_id' or 'author' fields can be set")
+    # @validates_schemaå
+    # def validate_author_fields(self, data, **kwargs):
+    #     if not data.get("author_id") and not data.get("author"):
+    #         raise ValidationError("Either 'author_id' or 'author' is required.")
+    #     if data.get("author_id") and data.get("author"):
+    #         raise ValidationError("Only one of 'author_id' or 'author' fields can be set")
         
+    # class Meta:
+    #     exclude = ("author",)
+
     @post_load
     def make_book(self, data, **kwargs):
         return Book(**data)
+    
+#TODO: Determine if this is too much 'business logic' in my schema
+#TODO: Problem: This is breaking single responsibility principle, because it is both doing deserialization, and 
+#conversion to sqlalchemy object. Hm. 

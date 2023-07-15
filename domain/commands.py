@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from domain.model.book import Author
+from domain.model.book import Author, Book
 
 
 class Command:
@@ -7,11 +7,8 @@ class Command:
 
 @dataclass
 class CreateBook(Command):
-    title: str
-    year: int
-    author_id: int
+    book: Book
 
 @dataclass
 class CreateAuthor(Command):
-    first_name: str
-    last_name: str
+    author: Author

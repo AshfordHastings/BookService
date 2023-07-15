@@ -7,16 +7,16 @@ from . import command_handlers
 
 Message = Union[commands.Command, events.Event]
 #TODO: Update Error handling here!!
-def handle(message: Message, session:Session):
+def handle(session:Session, message: Message):
     results = []
     queue = [message]
     while [queue]:
         message = queue.pop(0)
         if isinstance(message, commands.Command):
-            command_result = handle_command(message, session)
+            command_result = handle_command(session, message)
             results.append(command_result)
         elif isinstance(message, events.Event):
-            handle_event(message, session)
+            handle_event(session, message)
         else:
             raise Exception(f"{message} is not of type Event or Command.")
         return results
@@ -28,11 +28,11 @@ def handle(message: Message, session:Session):
 #         results.append(handler(command, session))
 #     session.commit()
 #     return results[0]
-def handle_command(command: commands.Command, session:Session):
+def handle_command(session:Session, command: commands.Command):
     try: 
         #TODO: Use kwargs to pass in results of one command to next command - chaining 
         handler = COMMAND_HANDLERS[type(command)]
-        result = handler(command, session)
+        result = handler(session, command)
         print(f"RESULT: {result}")
         return result
     except Exception:

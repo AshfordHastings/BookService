@@ -23,30 +23,36 @@ from sqlalchemy.orm import Session
     # Send alert that user is out of books if the limit has been hit 
 
 #TODO: Update to allow Authors and Books to be passed in as object maybe? 
-def create_author(session:Session, first_name, last_name):
+def create_author(session:Session, author: 'Author'):
     results = messagebus.handle(
+        session,
         commands.CreateAuthor(
-            first_name,
-            last_name
+            author
         ),
-        session
     )
-    author = results.pop()
-    return author
+    created_author = results.pop()
+    return created_author
 
-def create_book_with_author_id(session:Session, title, year, author_id):
+def create_book(session:Session, book: 'Book'):
     results = messagebus.handle(
+        session,
         commands.CreateBook(
-            title,
-            year,
-            author_id
-        ),
-        session
+            book
+        )
     )
-    book = results.pop()
-    return book
+    created_book = results.pop()
+    return created_book
 
-def create_book_and_author(session:Session, title, year, first_name, last_name):
-    author = create_author(session, first_name, last_name)
-    book = create_book_with_author_id(session, title, year, author.id)
-    return book
+def create_book_and_optionally_create_author(session:Session, book:'Book', author:'Author'=None):
+    #TODO: Unit of work should stop and end inside of this service function (?)
+    if not book.author_id and not author:
+        raise Exception("Either 'author_id' or 'author' is required.")
+    if book.author_id and author:
+        raise Exception("Cannot create an author and create a book with reference to an existing author.")
+    
+    if author:
+        created_author = create_author(session, author)
+        book.author_id = created_author.id
+
+    created_book = create_book(session, book)
+    return created_book
