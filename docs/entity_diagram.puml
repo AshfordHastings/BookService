@@ -1,0 +1,71 @@
+@startuml Book Service Class Diagram
+!define primary_key(x) <b><color:#b8861b><&key></color> x</b>
+!define foreign_key(x) <color:#aaaaaa><&key></color> x
+!define column(x) <color:#efefef><&media-record></color> x
+!define table(x) entity x << (T, white) >>
+
+class Book {
+    +title: str 
+    +year: int 
+}
+
+class Author {
+    +first_name: str 
+    +last_name: str 
+    
+}
+
+class MData {
+    +ext: str
+}
+
+table( user ) {
+  primary_key( id ): UUID 
+  column( isActive ): BOOLEAN 
+  foreign_key( cityId ): INTEGER <<FK>>
+}
+
+abstract class Host {
+    +id: str
+}
+
+class AzureBlobStorageHost {
+    +url: str 
+    +container: str 
+}
+
+class DirHost {
+    +base_dir
+}
+
+class TempHost {
+    +in_mem_content: dict 
+}
+
+class User {
+    +username: str 
+    +display_name: str 
+}
+
+Host ||--o{ BookObject  
+
+' Host <|- AzureBlobStorageHost
+' Host <|- DirHost
+' Host <|- TempHost
+
+Book }o--o| Author
+BookObject }o--|| Book
+BookObject --|| MData
+User }o--o{ BookObject
+
+' Host }--|| BookObject / Many to one
+
+@enduml
+
+
+
+
+
+' class Book #header:Wheat;line:red {
+
+' }

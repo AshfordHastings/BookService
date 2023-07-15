@@ -1,0 +1,64 @@
+@startuml Book Service Class Diagram
+class Book {
+    +title: str 
+    +year: int 
+}
+
+class Author {
+    +first_name: str 
+    +last_name: str 
+    
+}
+
+class MData {
+    +ext: str
+}
+
+class BookObject {
+    +id: int
+}
+
+abstract class Host {
+    {abstract} +get_book_content(): bytes
+    {abstract} +store_book_content(BookObject, bytes): str
+}
+
+class AzureBlobStorageHost {
+    +url: str 
+    +container: str 
+}
+
+class DirHost {
+    +base_dir
+}
+
+class TempHost {
+    +in_mem_content: dict 
+}
+
+class User {
+    +username: str 
+    +display_name: str 
+}
+
+Host }o--|| BookObject  
+' Host *-- BookObject
+Host <|- AzureBlobStorageHost
+Host <|- DirHost
+Host <|- TempHost
+Book *-- Author
+BookObject *-- Book
+BookObject *-- MData
+User *-* Book
+
+' Host }-- BookObject / Many to one
+
+@enduml
+
+
+
+
+
+' class Book #header:Wheat;line:red {
+
+' }
