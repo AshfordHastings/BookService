@@ -12,3 +12,8 @@ class OutOfStock(Event):
 class BookLimitReached(Event):
     user_id: str
 
+#Potentially find place where I can serialize this before placing on queue? 
+@dataclass
+class BookCreated(Event):
+    book_id: str
+    author_id: str
