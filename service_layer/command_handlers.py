@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from domain import commands
 from domain.model.book import Book, Author
-from domain.events import BookCreated
+from domain import events
 
 #TODO: Implement something similar to an interface, but for functions
 
@@ -26,11 +26,12 @@ def create_author(session:'Session', queue:List['Message'], command: 'commands.C
 
     session.add(command.author)
     session.flush() #Need to flush so author gets assigned an id, consider doing this outside
+    queue.append(events.AuthorCreated(command.author))
     return command.author        
 
 def create_book(session:'Session', queue:List['Message'], command: 'commands.CreateBook'):
     # TODO: Implement Error Handling
     session.add(command.book)
-    queue.append(BookCreated(command.book.id, command.book.author_id))
+    queue.append(events.BookCreated(command.book.id, command.book.author_id))
     return command.book
 

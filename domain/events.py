@@ -17,3 +17,7 @@ class BookLimitReached(Event):
 class BookCreated(Event):
     book_id: str
     author_id: str
+
+@dataclass
+class AuthorCreated(Event):
+    author: Author

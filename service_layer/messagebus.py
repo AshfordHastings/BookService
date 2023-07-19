@@ -51,5 +51,6 @@ COMMAND_HANDLERS = {
 
 EVENT_HANDLERS = {
     events.BookLimitReached: [event_handlers.send_book_limit_reached_notification],
-    events.BookCreated: [event_handlers.publish_book_created_event]
+    events.BookCreated: [event_handlers.publish_book_created_event],
+    events.AuthorCreated: [event_handlers.publish_author_created_event]
 }
