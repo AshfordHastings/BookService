@@ -1,4 +1,4 @@
-from flask import Blueprint, request, g, make_response
+from flask import Blueprint, request, g
 from BookService.domain.schemas.book import AuthorSchema, BookSchema
 from domain.model.book import BookObject, Book, MData, Author
 from sqlalchemy import select 
@@ -36,7 +36,7 @@ def create_book_and_optionally_create_author_endpoint():
     try:
         result = create_book_and_optionally_create_author(session, book, author)
     except Exception:
-        return make_response(resps.ERROR_400, error="Author is not included in the request.")
+        return response_with(resps.ERROR_400, error="Author is not included in the request.")
 
     return response_with(resps.SUCCESS_201, value=result)
 
@@ -47,5 +47,5 @@ def get_book_resouces(book_id):
     stmt = select(Book).where(Book.id == book_id)
     book = session.scalars(stmt).first()
 
-    if book == None: return make_response({}, 404)
+    if book == None: return response_with({}, 404)
     return response_with(resps.SUCCESS_200, value=book)
